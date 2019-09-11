@@ -1,16 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Bootstrap 101 Template</title>
+        <title>CP/M Due Project</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     </head>
     <body>
-        <h1>Ptcryan on GitHub.com</h1>
-        <br>
-        <p>I'm hosted with GitHub Pages.</p>
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="bootstrap/js/bootstrap.min.js">_386 = { onePass: true, speedFactor: 1.25};</script>
+        <div class="row">
+            <div class="span9 offset3">
+                <div class="page-header">
+                    <h1>CP/M Due</h1>
+                    <p class="lead">This is a CP/M v2.2 computer. It uses a Z80 emulator, and runs on an Arduino Due.</p>
+                </div>
+                <br>
+
+                <h2>How to build the application</h2>
+
+                <p>Building the application is easy. Simply get a copy of CPM_Due, open the .ino file in the Arduino IDE, compile it, and load it on your <a href="http://arduino.cc/en/Main/ArduinoBoardDue">Arduino Due</a> or <a href="http://digistump.com/products/50"> Digistump DigiX</a> HW. Note that in order to build applications you'll need Arduino 1.5 or higher to support the ARM processor on the Due/DigiX. I've been using 1.5.6-r2.</p>
+                
+                <p>To create the disk image you'll need to follow the directions in the tools/avrcpm/z80 directory to create a floppy disk onto an SD card.</p>
+                
+                <p>Plug the SD card into the HW and 'boot' the application to get CP/M running.</p>
+                
+                <h2>How to build the HW</h2>
+                
+                <p>You'll need an Arduino Due in order to run this application. The reason is the Due is powerful enough with an 84MHz ARM Cortex-M3 to emulate a Z80 at full speed, and has enough built in RAM to support 64K of RAM (even though this distribution of CP/M is built for 62K).</p>
+                
+                <p>But wait, the Due doesn't have a place to put an SD card. Yup. You'll need to wire in your own SD card adaptor. When you go looking for one be mindful that the Due doesn't have the same pinout as an Uno, and most SD card shields won't work with the Due.</p>
+                
+                <p>To build mine I used an <a href="http://www.adafruit.com/products/254">SD card breakout board</a> from <a href="http://www.adafruit.com">Adafruit</a>, and prototyping shield from <a href="http://www.nkcelectronics.com/MEGAshield-KIT-for-Arduino-MEGA-2560-R3-and-Arduino-DUE_p_309.html">NKC Electronics</a> (I got mine from <a href="http://www.amazon.com">Amazon</a>). It allowed me to also add other HW to the 'machine' which was nice.</p>
+                
+                <p>An alternative shield is available from <a href="http://www.sainsmart.com/arduino/arduino-shields/lcd-shields/sainsmart-extend-tft-lcd-shield-for-arduino-due-5-7-inch-lcd-display.html">SainSmart</a>, and it works fine if all you want is the SD adaptor for a Due. It's simple and convenient.</p>
+                
+                <p>If you prefer an all-in-one HW solution you can also use the DigiX. It has a built-in SD card reader as well as WiFi! (but unused on this project). It would be really cool if someone(?) got WiFi working with CP/M, but that's for another time.</p>
+                
+                <ul class="thumbnails">
+                    <li class="span4">
+                            <img src="https://s3.amazonaws.com/digistump-resources/images/m/8dab1ef169626edc7d400ed59a31a18a.jpg" alt="DigiX">
+                    </li>
+                    <li class="span4">
+                            <img src="http://arduino.cc/en/uploads/Main/ArduinoDue_Front_450px.jpg" alt="Due">
+                    </li>
+                </ul>
+                
+                <h2>How to create disk images</h2>
+            
+                <p>Creating the disk images is a little tricky. Here's how I did it with OS X.</p>
+
+                <h3>OS X</h3>
+            
+                <p>Use the instructions in the 'readme.txt' file to create the CP/M image on an SD Card. It uses some Terminal commands so you'll have be be comfortable with doing that.</p>
+            
+                <p>If you don't have cpmtools already installed you can easily get them using <a href="https://github.com/Homebrew/homebrew"> Homebrew</a>. Once you have that just type:</p>
+                
+                <pre class="prettyprint linenums">
+$ brew install cpmtools
+                    </pre>
+
+            <p>Be warned! when you finally get to the point of copying the CP/M image to the sd card be carefull to note the volume name for the card. That might mean you have to modify the `Makefile` to change the path. Don't blindly run `make` or you might overwrite something important!</p>
+            
+<h2>Connecting the HW to a terminal for user I/O</h2>
+                
+                <p>Once you have the application loaded, the image written to an SD card, and connected to the HW, the last thing you need to do is connect to a terminal emulation program. For this project I've mostly used <a href="http://freeware.the-meiers.org">CoolTerm</a> because first, it's free, and second it has just about all the features you need. In the application preferences set the serial speed to 19200 8n1. Check the box to handle the backspace character, and the terminal bell.</p>
+                
+                <p>Connecting the HW to the computer is fairly simple. Use a USB cable to connect the Due to the computer and select that connection inside CoolTerm.</p>
+                
+                <p>If you have a DigiX board it's a little more complicated because there's only only one USB connection to the board, and it's used for programming. Switching between the Arduino IDE and CoolTerm is tedious so I connected a USB to serial adaptor to RXTX0 (pins 0 and 1) on the DigiX. <span class="label label-warning">**BE WARNED!**</span> the DigiX (and Due) can only tolerate 3.3V on the I/O. Only use a serial adaptor that has a 3.3V output. I found a handy one by <a href="http://www.amazon.com/SunFounder-Arduino-Program-Download-Mega2560/dp/B00GD6GE6O/ref=sr_1_1?ie=UTF8&qid=1404669084&sr=8-1&keywords=sunfounder+usb+serial"> SunFounder on Amazon</a> that has a switch selectable 3.3V and 5V output.</p>
+                
+                <h3>Where to find this project</h3>
+                
+                <p>This project is hosted on <a href="http://www.github.com">GitHub</a> as <a href="https://www.github.com/ptcryan/CPM_Due">ptcryan/<strong>CPM_Due</strong></a>. Feel free to contribute as much as you like!</p>
+
+                <h3>Version history</h3>
+                
+                <p>* R2014-07-06: First official version.<br>
+    * Will boot into CP/M. Stable. Runs MS-Basic and Zork I. Supports Arduino
+    Due and Digistump DigiX.<br></p>
+                
+                <p>Copyright (C) 2014 David Ryan (ptcryan)</p>
+
+                <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+                
+                <script src="http://code.jquery.com/jquery.js"></script>
+                <script src="bootstrap/js/bootstrap.min.js">_386 = { onePass: true, speedFactor: 1.25};</script>
+            </div>
+        </div>
     </body>
 </html>
